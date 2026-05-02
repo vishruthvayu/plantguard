@@ -1,9 +1,10 @@
 import torch 
 from torchvision import transforms
-DEVICE = "cuda" if torch.is_vulkan_available() else "cpu"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 DATA_DIR = "data/plantvillage dataset/color"
 
+NUM_EPOCHS = 10
 IMAGE_SIZE = 224
 BATCH_SIZE = 32
 NUM_WORKERS = 2
