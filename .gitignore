@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+#project specific 
+data/
+checkpoints/
+logs/
+.DS_Store
