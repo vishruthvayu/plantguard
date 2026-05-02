@@ -1,8 +1,15 @@
+import torch
 from src.dataset import PlantDiseaseDataset
 from torch.utils.data import DataLoader,random_split
 import config
+from src.model import get_model
 
 dataset = PlantDiseaseDataset(root_dir=config.DATA_DIR, transform=config.TRAIN_TRANSFORMS)
+
+# print(f"Total images: {len(dataset)}")
+# print(f"Total classes: {len(dataset.classes)}")
+# print(f"first 3 classes: {dataset.classes[:3]}")
+# print(f"Sample entry: {dataset.samples[0]}")
 
 train_size = int(0.8 * len(dataset))
 val_size = len(dataset) - train_size
@@ -19,7 +26,13 @@ images,labels = next(iter(train_loader))
 print(f"Batch image shape: {images.shape}")
 print(f"Batch label shape: {labels.shape}")
 
-# print(f"Total images: {len(dataset)}")
-# print(f"Total classes: {len(dataset.classes)}")
-# print(f"first 3 classes: {dataset.classes[:3]}")
-# print(f"Sample entry: {dataset.samples[0]}")
+model = get_model(num_classes=config.NUM_CLASSES)
+
+dummy_input = torch.randn(32,3,224,224)
+output = model(dummy_input)
+print(f"Model output shape: {output.shape}")
+
+total = sum(p.numel() for p in model.parameters())
+trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+print(f"total parameters: {total}")
+print(f"trainable parameters: {trainable}")
