@@ -1,6 +1,6 @@
 # train_model.py → run this to train
 # main.py → run this for inference
-
+# we run all thr training part in colab using t4 in plantguard notebook.
 
 import torch
 import config

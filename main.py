@@ -12,7 +12,8 @@ true_label = dataset.classes[dataset.samples[0][1]]
 # Predict
 result = predict(
     image_path=image_path,
-    checkpoint_path="checkpoints/best_model.pth",
+    # checkpoint_path="checkpoints/best_model.pth",
+    checkpoint_path="checkpoints/best_model_finetuned.pth",
     class_names=dataset.classes
 )
 
