@@ -26,6 +26,7 @@ TEST_TRANSFORMS = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485,0.456,0.406],std=[0.229,0.224,0.225])
     ])
+VAL_TRANSFORMS = TEST_TRANSFORMS
 
 CLASS_NAMES = [
     'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust',
