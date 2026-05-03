@@ -52,3 +52,22 @@ def get_model(num_classes,pretrained=True):
         in_features = model.classifier[1].in_features
         model.classifier[1] = nn.Linear(in_features,num_classes)
     return model
+
+def unfreeze_last_blocks(model,num_blocks=4):
+
+    for param in model.parameters():
+        param.requires_grad = False
+
+    blocks_to_unfreeze = list(model.features.children())[-num_blocks:]
+    for block in blocks_to_unfreeze:
+        for param in block.parameters():
+            param.requires_grad = True
+
+    for param in model.classifier.parameters():
+        param.requires_grad=True
+
+    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    total = sum(p.numel() for p in model.parameters())
+    print(f"trainable parameters: {trainable:,} / {total:,}")
+    return model
+
