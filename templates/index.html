@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+    <title>PlantGuard</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>🌿 PlantGuard</h1>
+      <p class="subtitle">Plant Disease Detection AI</p>
+
+      <div
+        class="upload-area"
+        onclick="document.getElementById('imageInput').click()"
+      >
+        <img id="preview" />
+        <p id="uploadText">📁 Click to upload leaf image</p>
+        <input
+          type="file"
+          id="imageInput"
+          accept="image/*"
+          style="display: none"
+        />
+      </div>
+
+      <button onclick="predict()">🔍 Detect Disease</button>
+
+      <div id="result"></div>
+    </div>
+
+    <script>
+      // Runs immediately when file is selected
+      document
+        .getElementById("imageInput")
+        .addEventListener("change", function () {
+          const file = this.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              document.getElementById("preview").src = e.target.result;
+              document.getElementById("preview").style.display = "block";
+              document.getElementById("uploadText").style.display = "none";
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+
+      // Runs when user clicks Detect Disease
+      async function predict() {
+        const file = document.getElementById("imageInput").files[0];
+        if (!file) {
+          alert("Please select an image first!");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await fetch("/predict", {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        const className = result.class
+          .replace(/___/g, " - ")
+          .replace(/_/g, " ");
+
+        document.getElementById("result").innerHTML = `
+            <h2>🌿 ${className}</h2>
+            <p>Confidence: ${result.confidence}%</p>
+        `;
+        document.getElementById("result").style.display = "block";
+      }
+    </script>
+  </body>
+</html>

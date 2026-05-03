@@ -1,4 +1,4 @@
-from flask import Flask , jsonify , request
+from flask import Flask , jsonify , request , render_template
 from PIL import Image
 import io
 import config
@@ -12,7 +12,7 @@ load_model(config.CHECKPOINT_PATH, dataset.classes)
 
 @app.route('/')
 def home():
-    return "Welcome to the Plant Disease Detection API!"
+    return render_template('index.html')
 
 @app.route('/predict',methods=['POST'])
 def predict():
