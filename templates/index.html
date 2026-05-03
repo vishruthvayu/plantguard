@@ -45,7 +45,6 @@
           }
         });
 
-      // Runs when user clicks Detect Disease
       async function predict() {
         const file = document.getElementById("imageInput").files[0];
         if (!file) {
@@ -53,25 +52,37 @@
           return;
         }
 
+        // Show loading
+        document.getElementById("result").innerHTML = "⏳ Analyzing leaf...";
+        document.getElementById("result").style.display = "block";
+
         const formData = new FormData();
         formData.append("image", file);
 
-        const response = await fetch("/predict", {
-          method: "POST",
-          body: formData,
-        });
+        try {
+          const response = await fetch("/predict", {
+            method: "POST",
+            body: formData,
+          });
 
-        const result = await response.json();
+          if (!response.ok) {
+            throw new Error("Server error");
+          }
 
-        const className = result.class
-          .replace(/___/g, " - ")
-          .replace(/_/g, " ");
+          const result = await response.json();
+          const className = result.class
+            .replace(/___/g, " - ")
+            .replace(/_/g, " ");
 
-        document.getElementById("result").innerHTML = `
-            <h2>🌿 ${className}</h2>
-            <p>Confidence: ${result.confidence}%</p>
-        `;
-        document.getElementById("result").style.display = "block";
+          document.getElementById("result").innerHTML = `
+              <h2>🌿 ${className}</h2>
+              <p>Confidence: ${result.confidence}%</p>
+          `;
+        } catch (error) {
+          document.getElementById("result").innerHTML = `
+              <p>⚠️ Service is busy, please try again in 30 seconds.</p>
+          `;
+        }
       }
     </script>
   </body>

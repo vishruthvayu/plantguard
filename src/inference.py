@@ -38,8 +38,11 @@ def load_model(checkpoint_path, class_names):
     print("Model loaded successfully!")
 
 def predict_image(image):
-    # Uses cached model — no reloading!
-    tensor = config.TEST_TRANSFORMS(image).unsqueeze(0).to(config.DEVICE)
+    # Resize large images to save memory
+    if image.size[0] > 1000 or image.size[1] > 1000:
+        image = image.resize((500, 500))
+    
+    tensor = config.VAL_TRANSFORMS(image).unsqueeze(0).to(config.DEVICE)
     
     with torch.no_grad():
         outputs = _model(tensor)

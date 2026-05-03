@@ -2,10 +2,12 @@ from flask import Flask, jsonify, request, render_template
 from PIL import Image
 import io
 import os
+import torch
 import gdown
 import config
 from src.inference import load_model, predict_image
 
+torch.set_num_threads(1) 
 app = Flask(__name__)
 
 def download_model():
