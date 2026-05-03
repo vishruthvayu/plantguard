@@ -2,13 +2,11 @@ from flask import Flask , jsonify , request , render_template
 from PIL import Image
 import io
 import config
-from src.dataset import PlantDiseaseDataset
 from src.inference import load_model, predict_image
 
 app = Flask(__name__)
 
-dataset = PlantDiseaseDataset(root_dir=config.DATA_DIR, transform=None)
-load_model(config.CHECKPOINT_PATH, dataset.classes)
+load_model(config.CHECKPOINT_PATH, config.CLASS_NAMES)
 
 @app.route('/')
 def home():
